@@ -45,25 +45,36 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     const id = uuidv4()
 
     // Registering the Todo on the DynamoDB
-    await document.put({
-        TableName: "todos",
-        Item: {
-            id,
-            user_id,
-            title,
-            done: false,
-            deadline: dateDeadline
+    try {
+        await document.put({
+            TableName: "todos",
+            Item: {
+                id,
+                user_id,
+                title,
+                done: false,
+                deadline: dateDeadline
+            }
+        }).promise()
+    
+        return {
+            statusCode: 201,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            },
+            body: JSON.stringify({
+                message: "TODO created with success!"
+            })
         }
-    }).promise()
-
-    return {
-        statusCode: 201,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true
-        },
-        body: JSON.stringify({
-            message: "TODO created with success!"
-        })
-    }
+    } catch (err) {
+        return {
+            statusCode: 400,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            },
+            body: JSON.stringify(err)
+        }
+    }   
 }

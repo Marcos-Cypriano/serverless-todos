@@ -53,6 +53,30 @@ const serverlessConfiguration: AWS = {
           }
         }
       ]
+    },
+    doneTodo: {
+      handler: "src/functions/doneTodo.handler",
+      events: [
+        {
+          http: {
+            path: "todos/done/{user_id}",
+            method: "patch",
+            cors: true
+          }
+        }
+      ]
+    },
+    deleteTodo: {
+      handler: "src/functions/deleteTodo.handler",
+      events: [
+        {
+          http: {
+            path: "todos/delete/{user_id}",
+            method: "delete",
+            cors: true
+          }
+        }
+      ]
     }
   },
   package: { individually: false },
